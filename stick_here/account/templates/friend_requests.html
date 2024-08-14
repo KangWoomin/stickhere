@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Friend Requests{% endblock %}
+
+{% block content %}
+<main class="container">
+    <h2>Friend Requests</h2>
+    <ul>
+        {% for request in received_requests %}
+            <li>
+                {{ request.from_user.nickname }} - {{ request.status }}
+                {% if request.status == 'pending' %}
+                    <a href="{% url 'accept_friend_request' request.id %}" class="btn btn-success btn-sm">Accept</a>
+                    <a href="{% url 'reject_friend_request' request.id %}" class="btn btn-danger btn-sm">Reject</a>
+                {% elif request.status == 'accepted' %}
+                    <span class="text-success">Accepted</span>
+                {% elif request.status == 'rejected' %}
+                    <span class="text-danger">Rejected</span>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>No friend requests received.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Friends List</h2>
+    <div>
+        {% if friends %}
+            <ul>
+                {% for friend in friends %}
+                    <li>{{ friend.nickname }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No friends found.</p>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

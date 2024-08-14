@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title%}user_type{%endblock%}
+
+{%block content%}
+<div class="container" style="margin-top: 20%;">
+    <div class="row">
+        <div class="col" >
+            <a href="{% url 'login'%}"><button style="background-color: #f56c00; color: white; 
+                font-size: 24px;
+                padding: 200px 120px;
+                border-radius: 5px">일 반</button></a>
+        </div>
+        <div class="col">
+            <a href="#"><button style="background-color: #f56c00; color: white; 
+                font-size: 24px;
+                padding: 200px 120px;
+                border-radius: 5px">기 업</button></a>
+        </div>
+    </div>
+</div>
+{%endblock%}

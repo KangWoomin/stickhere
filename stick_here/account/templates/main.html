@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{%block title%}main{%endblock%}
+
+{% block content %}
+    <a href="{% url 'movie_board' %}">영상</a>
+    {%if user.is_authenticated%}
+        <p>환영 합니다.<br><b>{{user.nickname}}</b>님</p>
+    {%else%}
+        <p>하이</p>
+    {%endif%}
+    <div class="container">
+        <div class="row">
+                
+                <!-- 동영상 출력 필드 -->
+                <div class="col">
+                    <video controls width="1000" height="650">
+                    <source src="/static/uploads/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
+                    당신의 브라우저는 동영상을 지원하지 않습니다.
+                </video>
+                <img src="./로고.png">{{user.img}}&nbsp;&nbsp;
+                유저 이름 {{user.name}}
+                &nbsp;
+                <a href="#" style="font-size: 0.8rem;"><button>친구추가</button></a>
+                &nbsp;&nbsp;
+                <div style="float: right;">
+                    <a href="#" style="font-size: 0.8rem;">좋아요 누적수{{user.total_like}}</a>
+                    <a href="#" style="font-size: 0.8rem;">좋아요 클릭{{user.like_table}}</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{%endblock%}

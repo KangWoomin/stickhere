@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+    {% block title%}내주변{%endblock%}
+
+{% block content %}
+<style>
+    .wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+    .wrap * {padding: 0;margin: 0;}
+    .wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+    .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+    .info .title {padding: 5px 0 0 10px;height: 25px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
+    .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+    .info .close:hover {cursor: pointer;}
+    .info .body {position: relative;overflow: hidden;}
+    .info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
+    .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+    .desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
+    .info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
+    .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+    .info .link {color: #5085BB;}
+    .map_wrap {position:relative;overflow:hidden;width:100%;height:350px;}
+
+    .radius_border{border:1px solid #919191;border-radius:5px;}     
+    .custom_typecontrol {overflow:hidden;width:130px;height:30px;margin:0;padding:0;z-index:1;font-size:12px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+    .custom_typecontrol span {display:block;width:65px;height:30px;float:left;text-align:center;line-height:30px;cursor:pointer;}
+    .custom_typecontrol .btn {background:#fff;background:linear-gradient(#fff,  #e6e6e6);}       
+    .custom_typecontrol .btn:hover {background:#f5f5f5;background:linear-gradient(#f5f5f5,#e3e3e3);}
+    .custom_typecontrol .btn:active {background:#e6e6e6;background:linear-gradient(#e6e6e6, #fff);}    
+    .custom_typecontrol .selected_btn {color:#fff;background:#425470;background:linear-gradient(#425470, #5b6d8a);}
+    .custom_typecontrol .selected_btn:hover {color:#fff;}   
+    .custom_zoomcontrol {width:36px;height:40px;overflow:hidden;z-index:1;background-color:#f5f5f5;} 
+    .custom_zoomcontrol span {display:block;width:36px;height:30px;text-align:center;cursor:pointer;}     
+    .custom_zoomcontrol span img {width:15px;height:15px;padding:12px 0;border:none;}             
+    .custom_zoomcontrol span:first-child{border-bottom:0px solid #bfbfbf;}            
+</style>
+<div >
+    <div >
+        <div id="map" style="width:50%;height:400px;"></div>
+        <div class="custom_typecontrol radius_border">
+            <span onclick="zoomIn()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대"></span>  
+            <button onclick="panTo()">현위치</button> 
+        </div>
+    </div>
+</div>
+    </div>
+    <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=dc6eb626632981e376ccf3bd42b936cb"></script>
+    <script>
+    let map;
+    let currentLocation = { lat: null, lon: null };
+    let marker;
+    var overlays = [];
+    document.addEventListener('DOMContentLoaded', async function() {
+        await initMap(); // 페이지 로드 시 지도 초기화
+        loadMarkers(); // 마커 로드
+    });
+
+    async function geolocation() {
+        return new Promise((resolve, reject) => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    resolve({
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude
+                    });
+                }, function(error) {
+                    reject(error);
+                });
+            } else {
+                reject(new Error('Geolocation is not supported by this browser.'));
+            }
+        });
+    }
+
+    async function initMap() {
+        try {
+            const location = await geolocation();
+            currentLocation = location;
+            const container = document.getElementById('map');
+            const options = {
+                center: new kakao.maps.LatLng(location.lat, location.lon),
+                level: 4
+            };
+            map = new kakao.maps.Map(container, options);
+
+            // 현재 위치에 마커 생성
+            marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(location.lat, location.lon),
+                map: map
+            });
+
+        } catch (error) {
+            console.error('위치 정보를 가져오는 중 에러 발생: ', error);
+            const container = document.getElementById('map');
+            const options = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667),
+                level: 4
+            };
+            map = new kakao.maps.Map(container, options);
+        }
+    }
+
+    function loadMarkers() {
+        var positions = [];
+        {% for i in text %}
+            positions.push({
+                nickname:'{{i.user}}',
+                title: '{{ i.title }}',
+                content: '{{ i.content }}',
+                latlng: new kakao.maps.LatLng({{ i.lat }}, {{ i.lnt }}),
+                pk : '/text_board/{{i.pk}}/'
+        });
+        {% endfor %}
+        {% for i in shorts %}
+            positions.push({
+                nickname:'{{i.user}}',
+                title: '{{ i.title }}',
+                content: '{{ i.content }}',
+                latlng: new kakao.maps.LatLng({{ i.lat }}, {{ i.lnt }}),
+                pk : '/account/short/{{i.pk}}/',
+            });
+        {% endfor %}
+
+        var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+
+        var markers = [];
+        
+
+        for (var i = 0; i < positions.length; i++) {
+            var imageSize = new kakao.maps.Size(24, 35); 
+            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+             marker = new kakao.maps.Marker({
+                map: map, 
+                position: positions[i].latlng, 
+                title: positions[i].title, 
+                image: markerImage 
+            });
+
+            var content = '<div class="wrap">' + 
+            '    <div class="info">' + 
+            '        <div class="title">' + 
+            positions[i].title + 
+            '            <div class="close" onclick="closeOverlay(' + i + ')" title="닫기"></div>' + 
+            '        </div>' + 
+            '        <div class="body">' + 
+            '            <div class="img">' +
+            '                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">' +
+            '           </div>' + 
+            '            <div class="desc">' + 
+            '                <div class="ellipsis">'+positions[i].nickname+'</div>' + 
+            '                <div class="jibun ellipsis">'+positions[i].content+'</div>' + 
+         '                <div><a href="' + positions[i].pk+ '" target="_blank" class="link">'+positions[i].nickname+'</a></div>' + 
+            '            </div>' + 
+            '        </div>' + 
+            '    </div>' +    
+            '</div>';
+
+            overlay = new kakao.maps.CustomOverlay({
+                content: content,
+                position: marker.getPosition(),
+                yAnchor: 1 
+            });
+
+            markers.push(marker);
+            overlays.push(overlay);
+
+            kakao.maps.event.addListener(marker, 'click', (function(marker, overlay) {
+            return function() {
+                // 모든 오버레이를 숨김
+                for (var j = 0; j < overlays.length; j++) {
+                    overlays[j].setMap(null);
+                }
+                // 클릭한 마커의 오버레이만 표시
+                overlay.setMap(map);
+            };
+        })(marker, overlay));
+    }
+}
+
+    // 커스텀 오버레이를 닫기 위한 함수
+    function closeOverlay(index) {
+        if (index >= 0 && index < overlays.length) {
+            overlays[index].setMap(null);
+        }
+    }
+
+     maxZoomOutLevel = 7;
+    
+    function setZoomable(zoomable) {
+        map.setZoomable(zoomable);    
+    }
+
+    // kakao.maps.event.addListener(map, 'zoom_changed', function() {
+    //     var level = map.getLevel();
+    //     if (level > maxZoomOutLevel) {
+    //         setZoomable(false);
+    //     } else {
+    //         setZoomable(true);
+    //     }
+    // });
+       
+  
+
+    function zoomIn() {
+        map.setLevel(map.getLevel() - 1);
+    }
+
+    function zoomOut() {
+        map.setLevel(map.getLevel() + 1);
+    }
+
+    function panTo() {
+        var moveLatLon = new kakao.maps.LatLng(currentLocation.lat, currentLocation.lon);
+        map.panTo(moveLatLon);              
+    }
+    </script>
+{% endblock %}

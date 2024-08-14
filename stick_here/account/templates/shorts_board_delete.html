@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>동영상 삭제 확인</h2>
+<p>정말로 "{{ movie.title }}" 동영상을 삭제하시겠습니까?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">삭제</button>
+    <a href="{% url 'shorts_board_detail' movie.pk %}">취소</a>
+</form>
+{% endblock %}

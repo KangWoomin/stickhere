@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}게시물 수정{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">저장</button>
+            <a href="{% url 'text_board_list' %}" class="btn btn-secondary">취소</a>
+        </form>
+    </div>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script>
+        const editor = new toastui.Editor({
+            el: document.querySelector('#content'),
+            height: '500px',
+            initialEditType: 'markdown',
+            initialValue: document.getElementById('content').value,
+            previewStyle: 'vertical'
+        });
+
+        // Update textarea content before form submission
+        document.querySelector('form').addEventListener('submit', function () {
+            document.getElementById('content').value = editor.getMarkdown();
+        });
+    </script>
+{% endblock %}

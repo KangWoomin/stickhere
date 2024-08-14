@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}게시물 삭제{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>게시물 삭제</h1>
+        <p>정말로 "{{ post.title }}" 게시물을 삭제하시겠습니까?</p>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">삭제</button>
+            <a href="{% url 'text_board_list' %}" class="btn btn-secondary">취소</a>
+        </form>
+    </div>
+{% endblock %}

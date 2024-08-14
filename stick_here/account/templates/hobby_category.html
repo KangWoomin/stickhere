@@ -1,0 +1,11 @@
+{% extends 'base.html'%}
+
+{%block title%}hobby_category{%endblock%}
+
+{%block content%}
+
+    {% for hobby_category in hobby_categories %}
+        <a href="{% url 'increase_hobby_click' category_id=hobby_category.id %}">{{ hobby_category.name }}</a>
+    {% endfor %}
+
+{%endblock%}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}DM with {{ friend.email }}{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="dms">
+        {% for dm in dms %}
+            <div class="dm {% if dm.sender_id == request.user.id %}sent{% else %}received{% endif %}">
+                <p>{{request.user.nickname}}-{{ dm.message }}</p>
+                <small>{{ dm.create_dt }}</small>
+                {% if dm.sender_id == request.user.id %}
+                    <button class="btn btn-danger btn-sm delete-message" data-message-id="{{ dm.id }}">삭제</button>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <form id="dmForm" method="POST" action="{% url 'dm_view' friend.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <textarea id="messageInput" name="message" class="form-control" placeholder="메시지를 입력하세요..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">전송</button>
+        
+    </form>
+    <a href="{% url 'profile_view' request.user.id %}"><button class="btn btn-primary">뒤로 가기</button></a>
+</main>
+
+<script>
+    document.querySelectorAll('.delete-message').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var messageId = this.getAttribute('data-message-id');
+            var messageElement = this.closest('.dm');
+
+            fetch(`/delete_message/${messageId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    messageElement.remove(); // 메시지 삭제 후 DOM에서 제거
+                } else {
+                    alert('메시지를 삭제할 수 없습니다.');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

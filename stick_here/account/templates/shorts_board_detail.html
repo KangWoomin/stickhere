@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ movie.title }}</h2>
+<video width="320" height="240" controls>
+    <source src="{{ movie.video.url }}" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+<br>
+<a href="{% url 'profile_view' author.pk%}">{{author.nickname}}</a>
+
+
+
+    <!-- 친구 추가 버튼 -->
+    {% if author != request.user %}
+        {% if friend_request_sent %}
+            <p>친구</p>
+        {% else %}
+            {% if requset.user%}
+            <a href="{% url 'send_friend_request' author.id %}" class="btn btn-primary">친구추가</a>
+            {%endif%}
+        {% endif %}
+    {% else %}
+        
+    {% endif %}
+
+    <br>
+    {% if author == request.user %}
+        <a href="{% url 'shorts_board_edit' movie.pk %}">수정</a>
+        <a href="{% url 'shorts_board_delete' movie.pk %}">삭제</a>
+        <a href="{% url 'shorts_board_list' %}">목록으로 돌아가기</a>
+    {% endif %}
+{% endblock %}

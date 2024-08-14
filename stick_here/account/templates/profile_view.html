@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{%load static%}
+{% block content %}
+
+<h2>{{ author.nickname }}'s Profile</h2>
+<p>profile: <img src="{{ author.img.url }}"></p>
+<p>Email: {{ author.email }}</p>
+<p>nickname: {{author.nickname}}</p>
+<!-- <p>Latitude: {{ author.lat }}</p>
+<p>Longitude: {{ author.lnt }}</p> -->
+
+<!-- 친구 추가 버튼 -->
+{% if author != request.user %}
+    {% if friend_request_sent %}
+        <p>친구  <a href="{% url 'dm_view' author.id%}">메시지 보내기</a></p>
+    {% else %}
+        <a href="{% url 'send_friend_request' author.id %}" class="btn btn-primary">Add Friend</a>
+    {% endif %}
+        
+{% else %}
+    <a href="{% url 'user_profile_modify'  %}">프로필 수정</a>
+    <!-- 자신을 보는 경우 아무 것도 표시하지 않음 -->
+{% endif %}
+
+<br>
+<a href="{% url 'shorts_board_list' %}">게시물로 돌아가기</a>
+{% endblock %}
+
+
+

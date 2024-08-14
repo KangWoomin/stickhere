@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>동영상 목록</h2>
+<ul>
+    {% for movie in movies %}
+        <li>
+            <a href="{% url 'shorts_board_detail' movie.pk %}">{{ movie.title }}</a>
+        </li>
+    {% empty %}
+        <li>동영상 게시물이 없습니다.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

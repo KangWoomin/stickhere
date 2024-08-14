@@ -1,0 +1,64 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="left">
+            <button class="toggle btn btn-secondary">=</button>
+            <a href="{% url 'main'%}"><img src="{% static 'uploads/logo.png'%}" width="50" height="50" alt="로고"></a>
+            <b>Stick here</b>
+        </div>
+        <div class="center">
+            <form method="get" style="display: inline-block; margin-left: 0; padding-right: 0;">
+                <input type="text" placeholder="검색어 입력" size="30" style="font-size: 18px;">
+                <button style="font-size: 0.9rem;">검색</button>
+            </form>
+
+            <div class="dropdown">
+                <button class="dropdown-toggle" style="font-size: 0.9rem;">필터</button>
+                <div class="dropdown-menu">
+                    <a href="#">위치</a>
+                    <a href="#">취미</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="right" style="font-size: 0.9rem;">
+            {% if user.is_authenticated %}
+                <a href="{% url 'board_type' %}">글작성</a>
+                <a href="{% url 'profile_view' user.pk%}">프로필</a>
+                <a href="{% url 'logout' %}">로그아웃</a>
+            {% else %}
+                <a href="{% url 'login_user_type'%}">로그인</a>
+                <a href="{% url 'user_type_create' %}">회원가입</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <ul id="toggle2">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </div>
+
+    <div style="margin-left: 20%;margin-top: 10%;">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{%block title%}movie_board{%endblock%}
+
+{%block content%}
+    <div class="container">
+        <div class="row" style="padding-top: 5%; position: absolute;left: 12%;">
+            <div class="col" style="border: 1px solid black;padding-top: 10px; margin-right: 5%;">
+                <div>
+                    {% for i in content%}
+                    <!-- 동영상 출력 필드 -->
+                    <video controls width="1000" height="650">
+                        <source src="/static/uploads/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
+                        당신의 브라우저는 동영상을 지원하지 않습니다.
+                    </video>
+                </div>
+                <div>
+                    
+                <!-- 프로필 정보 필드-->
+                    <img src={{user.img}}>&nbsp;&nbsp;
+                    유저 이름 {{user.nickname}}
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="#" style="font-size: 0.8rem;"><button>친구추가</button></a>
+                    &nbsp;&nbsp;
+                    <div style="float: right;">
+                        <a href="#" style="font-size: 0.8rem;">좋아요 누적수{{user.total_like}}</a>
+                        <a href="#" style="font-size: 0.8rem;">좋아요 클릭{{user.like_table}}</a>
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+            <div class="col" style="border: 1px solid black;width: 500px;">
+                <div>
+                    <table style="border: 1px solid black;">
+                        <thead>
+                            <tr>
+                                <th colspan="3">
+                                    내용
+                                </th>
+                                <th>asdf</th>
+                                <th>dfdafs</th>
+                            </tr>
+                            
+                        </thead>
+                        
+                        <tbody>
+                            <tr>
+                                <td>유저이름</td>
+                                <td>추천</td>
+                                <td>추천수</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <!-- 관련댓글 for문 이용 작업 해보고 row와 col 말고 다르게 구성할지 고민
+                     안쪽에 테이블 형태로 입력 해도 될것 같음-->
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}

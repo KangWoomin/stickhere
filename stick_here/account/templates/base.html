@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <!-- 스타일 시트 연결 -->
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <!-- Google Fonts에서 가져온 폰트 -->
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Chewy&family=Didact+Gothic&family=Dongle&family=Holtwood+One+SC&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+    </style>
+
+    <style>
+        /* 폰트 스타일 정의 */
+        .poppins-extrabold {
+            font-family: "Poppins", sans-serif;
+            font-weight: 800;
+            font-style: normal;
+            font-size: 26px; /* STICKHERE 글씨의 크기 설정 */
+        }
+
+        .dongle-regular {
+            font-family: "Dongle", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 20px; /* 본문에 사용할 글씨체 설정 */
+        }
+
+        /* 상단바 색상 변경 (더 진한 주황색) */
+        .header {
+            background-color: #ff932df5; /* 더 진한 주황색 */
+            border-radius: 0; /* 직각 모서리 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px; /* 상하좌우 여백 설정 */
+        }
+
+        /* 토글 버튼, 검색 버튼, 필터 버튼 색상 변경 (밝은 주황색) */
+        .btn-orange {
+            background-color: #FFA500; /* 밝은 주황색 */
+            border: 2px solid #c76440; /* 진한 경계 */
+            border-radius: 15px; /* 둥근 모서리 */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 입체감을 위한 그림자 */
+            color: white; /* 텍스트 색상 흰색 */
+        }
+
+        /* 검색창 스타일 (하얀 배경) */
+        input[type="text"] {
+            text-align: center;
+            font-size: 18px;
+            background-color: white; /* 하얀 배경 */
+            border: 2px solid #eebcaa; /* 진한 경계 */
+            border-radius: 15px; /* 둥근 모서리 */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 입체감을 위한 그림자 */
+            color: black; /* 텍스트 색상 검정 */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 헤더 섹션 -->
+    <div class="header">
+        <div class="left">
+            <!-- 토글 버튼 -->
+            <button class="toggle btn btn-secondary poppins-extrabold btn-orange">=</button>
+            <!-- 로고 이미지 및 사이트명 -->
+            <a href="{% url 'main'%}"><img src="{% static 'uploads/guitar.png'%}" width="50" height="50" alt="로고"></a>
+            <b class="poppins-extrabold">STICKHERE</b>
+        </div>
+
+        <div class="center">
+            <!-- 검색 폼 -->
+            <form method="get" style="display: inline-block; margin-left: 0; padding-right: 0;">
+                <input type="text" placeholder="검색어를 입력하세요." size="30" class="poppins-extrabold">
+                <button class="poppins-extrabold btn-orange" style="font-size: 0.9rem;">검색</button>
+            </form>
+
+            <!-- 드롭다운 메뉴 -->
+            <div class="dropdown">
+                <button class="dropdown-toggle poppins-extrabold btn-orange" style="font-size: 0.9rem;">필터</button>
+                <div class="dropdown-menu">
+                    <a href="#" class="poppins-extrabold">위치</a>
+                    <a href="#" class="poppins-extrabold">취미</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="right" style="font-size: 0.3rem;">
+            <!-- 로그인 상태에 따라 다른 메뉴 표시 -->
+            {% if user.is_authenticated %}
+                <a href="{% url 'board_type' %}" class="poppins-extrabold">글작성</a>
+                <a href="{% url 'profile_view' user.id %}" class="poppins-extrabold">프로필</a>
+                <a href="{% url 'logout' %}" class="poppins-extrabold">로그아웃</a>
+            {% else %}
+                <a href="{% url 'login_user_type'%}" class="poppins-extrabold">로그인</a>
+                <a href="{% url 'user_type_create' %}" class="poppins-extrabold">회원가입</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 사이드바 섹션 -->
+    <div class="sidebar">   
+        <ul id="toggle2">
+            <li><a href="{%url 'main'%}" class="poppins-extrabold">Home</a></li>
+            <li><a href="{%url 'main_map'%}" class="poppins-extrabold">location</a></li>
+            <li><a href="#" class="poppins-extrabold">Services</a></li>
+            <li><a href="#" class="poppins-extrabold">Contact</a></li>
+        </ul>
+    </div>
+
+    <!-- 메인 콘텐츠 섹션 -->
+    <div style="margin-left: 20%; margin-top: 10%;">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- 스크립트 파일 연결 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

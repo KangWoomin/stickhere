@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>동영상 수정</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">저장</button>
+</form>
+<a href="{% url 'shorts_board_detail' movie.pk %}">취소</a>
+{% endblock %}
