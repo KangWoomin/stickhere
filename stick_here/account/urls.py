@@ -13,7 +13,7 @@ urlpatterns =[
 
     # path('user_profile/',view=profile, name='user_profile'),
     path('profile/<int:pk>/', view=profile_view, name='profile_view'),
-    path('user_profile_modify/',view=profile_modify, name='user_profile_modify'),
+    path('profile_edit/',view=profile_modify, name='profile_edit'),
 
 
     path('boart_type/',view=board_type, name='board_type'),
