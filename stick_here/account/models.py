@@ -67,7 +67,7 @@ class User(AbstractBaseUser):
     birth = models.DateField()
     hobbies = MultiSelectField(choices=Hobby_choices.choices, verbose_name='취미', default=Hobby_choices.기타, null=True,help_text='다중선택 가능')
     user_type = models.CharField(verbose_name='유저타입',max_length=50, choices=User_type.choices, default=User_type.일반)
-    img = models.ImageField(upload_to='uploads/', blank=True, null=True, default='uploads/logo.png')
+    img = models.ImageField(upload_to='media/uploads/', blank=True, null=True, default='uploads/logo.png')
     
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

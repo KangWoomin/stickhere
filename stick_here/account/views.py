@@ -123,46 +123,6 @@ def profile_modify(request):
 
     return render(request, 'profile_edit.html', {'user_profile': user_profile})
 
-# def profile_modify(request):
-#     user_profile = UserProfile.objects.get(user=request.user)
-#     if request.method =='POST':
-#         nickname = request.POST.get('nickname')
-#         text = request.POST.get('text')
-#         location = request.POST.get('location')
-#         selected_image = request.POST.get('existing_profile_image')  # 선택한 이미지 URL
-#         new_image = request.FILES.get('new_profile_image')
-   
-#         if nickname and nickname != request.user.nickname:
-#             request.user.nickname = nickname
-#             request.user.save()
-            
-#         if text and text != user_profile.text:
-#             user_profile.text = text
-        
-
-#         if new_image:
-#             fs = FileSystemStorage()
-#             filename = fs.save(new_image.name, new_image)
-#             request.user.img = filename
-#             request.user.save()
-#         elif selected_image != 'upload':
-#             if selected_image.startswith('/static/'):
-#                 # 기본 이미지의 경우 경로만 저장
-#                 request.user.img = selected_image.replace('/static/', '')
-#             else:
-#                 request.user.img = selected_image
-#             request.user.save()
-       
-#         if location and location != user_profile.location:
-#             user_profile.location = location
-
-#         user_profile.save()
-        
-        
-#         return redirect('profile_view')
-
-        
-#     return render(request,'profile_edit.html',{'user_profile':user_profile})
 
 
 from django.shortcuts import get_object_or_404
